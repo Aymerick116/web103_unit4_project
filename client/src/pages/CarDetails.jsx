@@ -1,13 +1,30 @@
-import React from 'react'
-import '../App.css'
+// src/pages/ViewItemDetails.jsx
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { getItem } from '../services/itemsAPI.js';
 
 const CarDetails = () => {
+  const { id } = useParams(); // Get item ID from the route params
+  const [item, setItem] = useState(null);
 
-    return (
-        <div>
+  useEffect(() => {
+    const fetchItem = async () => {
+      const data = await getItem(id);
+      console.log(item)
+      setItem(data);
+    };
+    fetchItem();
+  }, [id]);
 
-        </div>
-    )
-}
+  if (!item) return <div>Loading...</div>;
 
-export default CarDetails
+  return (
+    <div>
+      <h1>{item.name}</h1>
+      <p>{item.description}</p>
+      <p>Price: ${item.price}</p>
+    </div>
+  );
+};
+
+export default CarDetails;
